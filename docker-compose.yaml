@@ -21,6 +21,8 @@ services:
     depends_on:
       database:
         condition: service_healthy
+    networks:
+      - local
   database:
     image: "postgres:14.2"
     ports:
@@ -40,5 +42,16 @@ services:
       interval: 5s
       timeout: 5s
       retries: 5
+    networks:
+      - local
+  fakehttp:
+    build: ./fakehttp
+    networks:
+      local:
+        aliases:
+        - releases.hashicorp.com
 volumes:
   coder_data:
+networks:
+  local:
+    external: true
